@@ -1,26 +1,20 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <main v-if="!accessToken" class="bg-gray-50 p-6 sm:p-12 min-h-screen">
+    <LoginForm />
+  </main>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { mapState } from "vuex"
+
+import LoginForm from "@/modules/auth/components/LoginForm.vue"
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    LoginForm
+  },
+  computed: mapState(["accessToken"])
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
