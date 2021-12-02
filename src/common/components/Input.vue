@@ -6,14 +6,19 @@
     :name="name"
     :id="id"
     :required="required"
-    :value="value"
-    @input="(e) => handleInput(e.target.value)"
+    :value="modelValue"
+    @input="handleInput"
     />
   </div>
 </template>
 
 <script>
 export default {
-  props: ["type", "name", "id", "required", "value", "handleInput"]
+  props: ["type", "name", "required", "id", "modelValue"],
+  methods: {
+    handleInput(e) {
+      this.$emit("input-changed", e.target.value)
+    }
+  }
 }
 </script>

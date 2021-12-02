@@ -1,16 +1,13 @@
 <template>
   <div>
-    <Label 
-    :label="label"
-    :id="id"
-    />
+    <Label :id="id" :label="label" />
     <Input 
     :type="type"
-    :id="id"
     :name="name"
+    :id="id"
+    :modelValue="modelValue"
     :required="required"
-    :value="value"
-    :handleInput="handleInput"
+    @input-changed="handleInput"
     />
   </div>
 </template>
@@ -24,6 +21,11 @@ export default {
     Input,
     Label
   },
-  props: ["label", "id", "name", "type", "required", "value", "handleInput"]
+  props: ["id", "label", "type", "name", "required", "modelValue"],
+  methods: {
+    handleInput(value) {
+      this.$emit("update:modelValue", value)
+    }
+  }
 }
 </script>

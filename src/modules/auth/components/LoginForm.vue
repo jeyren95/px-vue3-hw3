@@ -3,26 +3,45 @@
     <form @submit.prevent="handleSubmit"> 
       <div class="text-3xl mt-4 mb-8 font-extrabold text-center">Login</div>
       <div class="space-y-6">
+        <p v-if="errorMessage !== ''" class="text-red-500">{{ errorMessage }}, please enter valid credentials.</p>
+        <!-- in vue3 => v-model translates into :value="email", @update:model-value="email = e.target.value" -->
         <InputField 
         type="text"
-        label="Email"
         id="email"
+        label="Email"
         name="email"
         required="true"
-        :value="email"
-        :handleInput="handleEmailInput"
+        v-model="email"
         />
-        <InputField 
+        <InputField
         type="password"
-        label="Password"
         id="password"
+        label="Password"
         name="password"
         required="true"
-        :value="password"
-        :handleInput="handlePasswordInput"
+        v-model="password"
         />
         <Button
         type="submit"
+        class="
+        w-full
+        inline-flex 
+        justify-center 
+        items-center 
+        py-2 px-4 
+        border border-transparent 
+        shadow-sm 
+        text-sm 
+        font-medium
+        rounded-md
+        text-white
+        bg-pink-600
+        hover:bg-pink-700 
+        focus:outline-none
+        focus:ring-2
+        focus:ring-offset-2
+        focus:ring-pink-500  
+        "
         >
         LOGIN
         </Button>
@@ -43,16 +62,22 @@ export default {
     InputField,
     Button
   },
-  computed: mapState(["email", "password"]),
+  data() {
+    return {
+      email: "",
+      password: ""
+    }
+  },
+  computed: {
+    ...mapState({
+      errorMessage: state => state.authStore.errorMessage
+    })
+  },
   methods: {
-    handleEmailInput(value) {
-      this.$store.commit("setEmail", value)
-    },
-    handlePasswordInput(value) {
-      this.$store.commit("setPassword", value)
-    },
     handleSubmit() {
-      this.$store.dispatch("handleSubmit")
+      this.$store.dispatch("handleSubmit", { email: this.email, password: this.password })
+      this.email = ""
+      this.password = ""
     }
   }
 }

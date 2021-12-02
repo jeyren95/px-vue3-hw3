@@ -1,0 +1,12 @@
+<template>
+  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+    {{ badgeText }}
+  </span>
+</template>
+
+<script>
+export default {
+  props: ["badgeText"]
+}
+</script>
+

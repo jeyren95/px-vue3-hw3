@@ -1,26 +1,11 @@
 export const authStore = {
   state: {
-    email: "",
-    password: ""
-  },
-  mutations: {
-    setEmail(state, input) {
-      state.email = input
-    },
-    setPassword(state, input) {
-      state.password = input
-    },
-    resetInputs(state) {
-      state.email = ""
-      state.password = ""
-      
-    }
+    errorMessage: ""
   },
   actions: {
-    handleSubmit({ state, commit, rootState }) {
-      console.log(state)
-      console.log(`Email: ${state.email}`)
-      console.log(`Password: ${state.password}`)
+    handleSubmit({ state, rootState }, payload) {
+      console.log(`Email: ${payload.email}`)
+      console.log(`Password: ${payload.password}`)
 
       fetch(`https://ecomm-service.herokuapp.com/login`, {
         method: "POST",
@@ -29,21 +14,27 @@ export const authStore = {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ 
-          username: state.email,
-          password: state.password
+          username: payload.email,
+          password: payload.password
         })
       })
       .then((res) => res.json())
       .then((data) => {
         if (data.access_token) {
+          if (state.errorMessage !== "") {
+            state.errorMessage = ""
+          }
+
           rootState.accessToken = data.access_token
+          localStorage.setItem("accessToken", data.access_token)
         } else {
+          state.errorMessage = data.message
           throw new Error(data.message)
         }
       })
-      .catch((err) => console.log(err))
-
-      commit("resetInputs")
+      .catch((err) => {
+        console.log(err)
+      })
     }
   }
 }
